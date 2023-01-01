@@ -5,6 +5,13 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+use App\Models\User;
+use App\Models\Customer;
+use App\Models\Exhibition;
+use App\Models\Ticket;
+use App\Models\Reservation;
+
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -14,11 +21,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        // User::truncate();
+        // Customer::truncate();
+        // Exhibition::truncate();
+        // Ticket::truncate();
+        // Reservation::truncate();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        User::factory(3)->create();
+        Customer::factory(3)->create();
+        Exhibition::factory(3)->create();
+        Ticket::factory(3)->create();
+        Reservation::factory(6)->create();
+        
+
     }
 }
