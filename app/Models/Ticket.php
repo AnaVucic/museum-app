@@ -13,6 +13,8 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    public $table = 'ticket';
+
     protected $fillable = [
         'price',
         'ticket_comment',
