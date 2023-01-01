@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('ticket', function (Blueprint $table) {
-            $table->foreignId('exhibition_id')->constrained('ticket');
+            $table->string('ticket_comment', 200)->nullable()->change();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('ticket', function (Blueprint $table) {
-            //
+           
         });
     }
 };
