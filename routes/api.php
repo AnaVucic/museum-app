@@ -2,6 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ExhibitionController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\UserController;
+use App\Models\Reservation;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +23,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::resource('users', UserController::class);
+
+Route::resource('customers', CustomerController::class);
+
+Route::resource('exhibitions', ExhibitionController::class);
+
+Route::resource('tickets', TicketController::class);
+
+Route::resource('reservations', ReservationController::class);
