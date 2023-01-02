@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
@@ -24,13 +25,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/profile', function (Request $request) {
+        return auth()->user();
+    });
+    Route::resource('customers', CustomerController::class)->only(['update', 'store', 'destroy']);
+    Route::resource('reservations', ReservationController::class)->only(['update', 'store', 'destroy']);
+    Route::post('/logout', [AuthController::class, 'logout']); // UNSUPPORTED
+});
 
-Route::resource('users', UserController::class);
 
-Route::resource('customers', CustomerController::class);
 
-Route::resource('exhibitions', ExhibitionController::class);
+Route::resource('users', UserController::class)->only(['index','show']);
 
-Route::resource('tickets', TicketController::class);
+Route::resource('customers', CustomerController::class)->only(['index','show']);
 
-Route::resource('reservations', ReservationController::class);
+Route::resource('exhibitions', ExhibitionController::class)->only(['index','show']);
+
+Route::resource('tickets', TicketController::class)->only(['index','show']);
+
+Route::resource('reservations', ReservationController::class)->only(['index','show']);
+
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::post('/login', [AuthController::class, 'login']);

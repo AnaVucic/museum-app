@@ -6,6 +6,7 @@ use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -17,10 +18,9 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::all();
-        
-        
-        return new CustomerCollection($customers);
 
+
+        return new CustomerCollection($customers);
     }
 
     /**
@@ -41,7 +41,24 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'firstname' => 'required|alpha|max:20',
+            'lastname' => 'required|alpha|max:20',
+            'email' => 'required|email|max:255|unique:customer'
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $customer = Customer::create([
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'email' => $request->email
+        ]);
+
+        return response()->json(['New customer added.', new CustomerResource($customer)]);
     }
 
     /**
@@ -53,7 +70,6 @@ class CustomerController extends Controller
     public function show(Customer $customer)
     {
         return new CustomerResource($customer);
-
     }
 
     /**
@@ -76,7 +92,23 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'firstname' => 'required|alpha|max:20',
+            'lastname' => 'required|alpha|max:20',
+            'email' => 'required|email|max:255|unique:customer'
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $customer->firstname = $request->firstname;
+        $customer->lastname = $request->lastname;
+        $customer->email = $request->email;
+        $customer->save();
+
+        return response()->json(['Customer details successfully updated.', new CustomerResource($customer)]);
     }
 
     /**
@@ -87,6 +119,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+        return response()->json('Customer removed.');
     }
 }
